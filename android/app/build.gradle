@@ -66,8 +66,5 @@ flutter {
     source '../..'
 }
 
-dependencies {
-        implementation "pub.dev.flutter/multi_image_picker:4.8.4"
-
-}
+dependencies {}
 

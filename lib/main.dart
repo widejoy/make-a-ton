@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_project/authentication/screens/login.dart';
+import 'package:my_project/Authentication/screens/Signup.dart';
+import 'package:my_project/Authentication/screens/login.dart';
+import 'package:my_project/screens/Introduction.dart';
 import 'package:my_project/screens/create_post_screen.dart';
 import 'package:my_project/screens/featured.dart';
 import 'package:my_project/screens/near_me.dart';
+import 'package:my_project/screens/onbording.dart';
 import 'package:my_project/widgets/drawer.dart';
 
 void main() async {
@@ -11,7 +14,7 @@ void main() async {
   await Firebase.initializeApp();
   runApp(
     const MaterialApp(
-      home: Login(),
+      home: Intro(),
     ),
   );
 }
