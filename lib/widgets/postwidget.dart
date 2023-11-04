@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
+// ignore: must_be_immutable
 class PostWidget extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   PostWidget(

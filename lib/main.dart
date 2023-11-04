@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_project/screens/create_post_screen.dart';
 import 'package:my_project/screens/featured.dart';
 import 'package:my_project/screens/near_me.dart';
+import 'package:my_project/widgets/drawer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 220, 101, 4),
+        ),
+        drawer: const MyDrawer(),
         bottomNavigationBar: NavigationBar(
           backgroundColor: const Color.fromARGB(255, 220, 101, 4),
           indicatorColor: Colors.amber[800],
@@ -39,6 +45,11 @@ class _MyAppState extends State<MyApp> {
               tooltip: 'Click here to find the hottest posts',
               label: 'Featured',
             ),
+            NavigationDestination(
+                tooltip: 'Click here to upload an issue',
+                selectedIcon: Icon(Icons.create_rounded),
+                icon: Icon(Icons.create_outlined),
+                label: 'Report a problem')
           ],
           onDestinationSelected: (int index) {
             setState(() {
@@ -46,10 +57,11 @@ class _MyAppState extends State<MyApp> {
             });
           },
         ),
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 220, 101, 4),
-        ),
-        body: <Widget>[const NearMe(), const Featured()][currentPageIndex],
+        body: <Widget>[
+          const NearMe(),
+          const Featured(),
+          const CreatePostScreen()
+        ][currentPageIndex],
       ),
     );
   }
