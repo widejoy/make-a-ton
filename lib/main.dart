@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_project/authentication/screens/login.dart';
 import 'package:my_project/screens/create_post_screen.dart';
 import 'package:my_project/screens/featured.dart';
 import 'package:my_project/screens/near_me.dart';
@@ -8,7 +9,11 @@ import 'package:my_project/widgets/drawer.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    const MaterialApp(
+      home: Login(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

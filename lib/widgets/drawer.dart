@@ -1,6 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_project/auth.dart';
+import 'package:my_project/Authentication/screens/login.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -23,40 +25,46 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.bus_alert),
             title: const Text('Bus Timing'),
-            onTap: () {
-              // Navigate to the settings page or perform the desired action
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.train_outlined),
             title: const Text('Train Timing'),
-            onTap: () {
-              // Navigate to the settings page or perform the desired action
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.traffic),
             title: const Text('Traffic High areas around you '),
-            onTap: () {
-              // Navigate to the settings page or perform the desired action
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.info),
             title: const Text('About'),
-            onTap: () {
-              // Navigate to the about page or perform the desired action
-            },
+            onTap: () {},
           ),
           const SizedBox(
             height: 428,
           ),
           ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text(
-                'Logout',
-              ),
-              onTap: () async {}),
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text('Logout'),
+            onTap: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const Login(),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Logout failed. Please try again.'),
+                  ),
+                );
+              }
+            },
+          )
         ],
       ),
     );

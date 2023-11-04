@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:my_project/Authentication/widgets/field.dart';
 import 'package:my_project/authentication/screens/login.dart';
 
@@ -28,7 +29,6 @@ class _SignUpState extends State<SignUp> {
       final User? user = userCredential.user;
 
       if (user != null) {
-        // Store user data in Firestore with UID as the document ID
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'username': usernameController.text,
           'email': emailController.text,
@@ -75,7 +75,16 @@ class _SignUpState extends State<SignUp> {
                   ),
                   onPressed: () {
                     createUserWithEmailAndPassword().then((value) {
-                      print("User registered and data stored successfully");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Account created sucesfully!'),
+                        ),
+                      );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
+                      );
                     });
                   },
                   child: const Text("Sign up"),
@@ -94,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) {
-                            return Login();
+                            return const Login();
                           },
                         ));
                       },
