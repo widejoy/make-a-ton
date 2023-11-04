@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-TextField customField(
-  TextEditingController cont,
-  String text,
-) {
+TextField customField({
+  TextEditingController? cont,
+  String? text,
+  bool isPass = false,
+}) {
   return TextField(
+    keyboardType: isPass ? TextInputType.visiblePassword : TextInputType.text,
     autocorrect: true,
     controller: cont,
+    obscureText: isPass,
     decoration: InputDecoration(
       filled: true,
       fillColor: const Color.fromARGB(255, 253, 241, 255),
