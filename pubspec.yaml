@@ -39,7 +39,6 @@ dependencies:
   share: ^2.0.4
   firebase_auth: ^4.12.1
   image_picker: ^1.0.4
-  multi_image_picker: ^4.8.01
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:my_project/widgets/custom_field.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -15,19 +14,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  List<Asset> selectedImages = <Asset>[];
-
-  Future<void> pickImages() async {
-    List<Asset> resultList = <Asset>[];
-    resultList = await MultiImagePicker.pickImages(
-      maxImages: 5, // You can adjust the maximum number of images.
-      enableCamera: true,
-    );
-
-    setState(() {
-      selectedImages = resultList;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,38 +39,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             const SizedBox(height: 16),
             customField(locationController, 'Location'),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: pickImages,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text(
-                'Pick Images',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            // Display selected images
-            if (selectedImages.isNotEmpty)
-              Column(
-                children: [
-                  const Text('Selected Images:'),
-                  Column(
-                    children: selectedImages.map((Asset asset) {
-                      return AssetThumb(
-                        asset: asset,
-                        width: 300,
-                        height: 300,
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle the form submission with title, description, location, and selectedImages.
-                },
+                onPressed: () {},
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.orange),
                 ),
