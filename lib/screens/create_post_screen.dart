@@ -52,7 +52,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       'location': locationController.text,
       'uid': uid,
       'votes': 0,
-      'progress': 0
+      'progress': 0,
+      'organisationanme': ""
     };
 
     final DocumentReference postRef =

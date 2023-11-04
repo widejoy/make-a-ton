@@ -243,9 +243,17 @@ class _PostWidgetState extends State<PostWidget> {
                   const SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    'This is being hanngled by:${widget.organisationname}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                            organisationanme: widget.organisationname),
+                      ));
+                    },
+                    child: Text(
+                      'This is being hanngled by:${widget.organisationname}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               )
@@ -263,7 +271,8 @@ class _PostWidgetState extends State<PostWidget> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const ProfilePage(),
+                        builder: (context) => ProfilePage(
+                            organisationanme: widget.organisationname),
                       ));
                     },
                     child: Text(
