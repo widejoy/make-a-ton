@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/Authentication/screens/login.dart';
 
 import 'package:my_project/Authentication/widgets/field.dart';
-import 'package:my_project/authentication/screens/login.dart';
+import 'package:my_project/screens/onboarding.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -82,7 +83,7 @@ class _SignUpState extends State<SignUp> {
                       );
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const Login(),
+                          builder: (context) => Onbording(),
                         ),
                       );
                     });
