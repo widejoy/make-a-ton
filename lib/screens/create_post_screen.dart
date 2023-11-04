@@ -26,7 +26,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController locationController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   List<XFile>? selectedImages;
-  final User? user = FirebaseAuth.instance.currentUser;
 
   List<Widget> imageWidgets = [];
 
@@ -42,6 +41,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> onPressed() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+
     final String uid = user!.uid;
 
     final post = {
@@ -50,6 +51,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       'description': descriptionController.text,
       'location': locationController.text,
       'uid': uid,
+      'votes': 0,
+      'progress': 0
     };
 
     final DocumentReference postRef =
@@ -90,14 +93,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               const SizedBox(height: 16),
               customField(locationController, 'Location'),
               const SizedBox(height: 20),
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: pickImage,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                style: const ButtonStyle(
+                  splashFactory: InkRipple.splashFactory,
+                  overlayColor: MaterialStatePropertyAll(Colors.orange),
                 ),
                 child: const Text(
                   'Pick Images',
-                  style: TextStyle(color: Colors.white),
                 ),
               ),
               if (selectedImages != null)

@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_project/authentication/screens/login.dart';
 import 'package:my_project/screens/create_post_screen.dart';
 import 'package:my_project/screens/featured.dart';
 import 'package:my_project/screens/near_me.dart';
+import 'package:my_project/widget_tree.dart';
 import 'package:my_project/widgets/drawer.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance
+      .activate(androidProvider: AndroidProvider.playIntegrity);
+
   runApp(
     const MaterialApp(
-      home: Login(),
+      home: Scaffold(
+        body: WidgetTree(),
+      ),
     ),
   );
 }
@@ -28,6 +34,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        navigationBarTheme: const NavigationBarThemeData(
+          labelTextStyle: MaterialStatePropertyAll(
+            TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 220, 101, 4),
@@ -41,19 +54,28 @@ class _MyAppState extends State<MyApp> {
             NavigationDestination(
               selectedIcon: Icon(Icons.area_chart),
               tooltip: 'Click here to find posts near you',
-              icon: Icon(Icons.area_chart_outlined),
+              icon: Icon(
+                Icons.area_chart_outlined,
+                color: Colors.white,
+              ),
               label: 'Near Me',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.featured_play_list),
-              icon: Icon(Icons.featured_play_list_outlined),
+              icon: Icon(
+                Icons.featured_play_list_outlined,
+                color: Colors.white,
+              ),
               tooltip: 'Click here to find the hottest posts',
               label: 'Featured',
             ),
             NavigationDestination(
                 tooltip: 'Click here to upload an issue',
                 selectedIcon: Icon(Icons.create_rounded),
-                icon: Icon(Icons.create_outlined),
+                icon: Icon(
+                  Icons.create_outlined,
+                  color: Colors.white,
+                ),
                 label: 'Report a problem')
           ],
           onDestinationSelected: (int index) {

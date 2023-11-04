@@ -1,5 +1,12 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/screens/profilepage.dart';
 import 'package:share/share.dart';
+import 'package:intl/intl.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 // ignore: must_be_immutable
 class PostWidget extends StatefulWidget {
@@ -12,11 +19,15 @@ class PostWidget extends StatefulWidget {
       required this.description,
       required this.votecount,
       required this.progress,
-      this.organisationname = ""})
+      required this.time,
+      this.organisationname = "",
+      required this.imageUrls})
       : super(key: key);
 
   final String username;
   final String title;
+  final String imageUrls;
+  final Timestamp time;
   final String location;
   final String description;
   int votecount;
@@ -28,8 +39,44 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  FirebaseStorage storage = FirebaseStorage.instance;
+
   bool isupvoted = false;
+  bool isloading = false;
+  int _currentImageIndex = 0;
   bool isdownvoted = false;
+  Future<List<String>> getFileNamesInFirebaseStorage(
+      String directoryPath) async {
+    ListResult result = await storage.ref().child(directoryPath).listAll();
+
+    List<String> fileNames = result.items.map((item) => item.name).toList();
+
+    return fileNames;
+  }
+
+  Future<void> loadImages() async {
+    isloading = true;
+    List<String> fileNames =
+        await getFileNamesInFirebaseStorage('posts/${widget.imageUrls}/');
+    for (var i in fileNames) {
+      final Reference imageRef =
+          FirebaseStorage.instance.ref().child('posts/${widget.imageUrls}/$i');
+      final imageBytesData = await imageRef.getData();
+      setState(() {
+        imageBytes.add(Uint8List.fromList(imageBytesData!));
+      });
+    }
+    isloading = false;
+  }
+
+  List<Uint8List> imageBytes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadImages();
+  }
+
   Icon upicon = const Icon(
     Icons.arrow_circle_up_outlined,
   );
@@ -99,136 +146,181 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      margin: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Outdoors-man-portrait_%28cropped%29.jpg/1200px-Outdoors-man-portrait_%28cropped%29.jpg'),
-            ),
-            title: Text(
-              widget.title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+    DateTime dateTime = widget.time.toDate();
+
+    String formattedDateTime =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 3,
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              leading: const CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Outdoors-man-portrait_%28cropped%29.jpg/1200px-Outdoors-man-portrait_%28cropped%29.jpg'),
               ),
-            ),
-            subtitle: Text(widget.location),
-          ),
-          Image.network(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Outdoors-man-portrait_%28cropped%29.jpg/1200px-Outdoors-man-portrait_%28cropped%29.jpg',
-            fit: BoxFit.cover,
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) {
-                return child;
-              }
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
+              title: Text(
+                widget.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
-              );
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              widget.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-          if (widget.progress == 0)
-            const LinearProgressIndicator(
-              value: 0,
-              minHeight: 8,
-              backgroundColor: Colors.red,
-            )
-          else if (widget.progress == 1)
-            Column(
-              children: [
-                const LinearProgressIndicator(
-                  value: 0.5,
-                  minHeight: 8,
-                  color: Colors.orange,
-                  backgroundColor: Colors.white,
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'This is being hanngled by:${widget.organisationname}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            )
-          else if (widget.progress == 2)
-            Column(
-              children: [
-                const LinearProgressIndicator(
-                  value: 1,
-                  minHeight: 8,
-                  color: Colors.green,
-                ),
-                Text(
-                  'This is fixed by:${widget.organisationname}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: upicon,
-                    onPressed: upvote,
-                  ),
-                  Text('${widget.votecount}'),
-                  IconButton(
-                    icon: downicon,
-                    onPressed: downvote,
-                  ),
-                ],
               ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.comment),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Container(
-                          height: 500,
-                        ),
+              subtitle: Text(widget.location),
+            ),
+            isloading
+                ? const Center(child: CircularProgressIndicator())
+                : CarouselSlider(
+                    items: imageBytes.map((imageData) {
+                      return Image.memory(
+                        imageData,
+                        fit: BoxFit.cover,
                       );
-                    },
+                    }).toList(),
+                    options: CarouselOptions(
+                      height: 200,
+                      viewportFraction: 1.0,
+                      enableInfiniteScroll: false,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                    ),
                   ),
-                  const Text('Comment'),
-                ],
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: imageBytes.map((imageData) {
+                int index = imageBytes.indexOf(imageData);
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        _currentImageIndex == index ? Colors.blue : Colors.grey,
+                  ),
+                );
+              }).toList(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                widget.description,
+                style: const TextStyle(fontSize: 16),
               ),
-              Row(
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                formattedDateTime,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+            if (widget.progress == 0)
+              const LinearProgressIndicator(
+                value: 0,
+                minHeight: 8,
+                backgroundColor: Colors.red,
+              )
+            else if (widget.progress == 1)
+              Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.share),
-                    onPressed: () {
-                      Share.share("https://pub.dartlang.org/packages/share",
-                          subject: "This is a Share Button");
-                    },
+                  const LinearProgressIndicator(
+                    value: 0.5,
+                    minHeight: 8,
+                    color: Colors.orange,
+                    backgroundColor: Colors.white,
                   ),
-                  const Text('Share'),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'This is being hanngled by:${widget.organisationname}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              )
+            else if (widget.progress == 2)
+              Column(
+                children: [
+                  const LinearProgressIndicator(
+                    value: 1,
+                    minHeight: 8,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const ProfilePage(),
+                      ));
+                    },
+                    child: Text(
+                      'This is fixed by:${widget.organisationname}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
                 ],
               ),
-            ],
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: upicon,
+                      onPressed: upvote,
+                    ),
+                    Text('${widget.votecount}'),
+                    IconButton(
+                      icon: downicon,
+                      onPressed: downvote,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.comment),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Container(
+                            height: 500,
+                          ),
+                        );
+                      },
+                    ),
+                    const Text('Comment'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.share),
+                      onPressed: () {
+                        Share.share("https://pub.dartlang.org/packages/share",
+                            subject: "This is a Share Button");
+                      },
+                    ),
+                    const Text('Share'),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

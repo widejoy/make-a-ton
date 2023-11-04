@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/Authentication/widgets/field.dart';
-import 'package:my_project/auth.dart';
 import 'package:my_project/authentication/screens/Signup.dart';
 import 'package:my_project/main.dart';
 
@@ -18,7 +17,7 @@ class _LoginState extends State<Login> {
   String? errorMessage = '';
   Future<void> signInWithEmailAndPassword() async {
     try {
-      await Auth().signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
