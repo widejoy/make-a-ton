@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/auth.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -50,14 +52,11 @@ class MyDrawer extends StatelessWidget {
             height: 428,
           ),
           ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text(
-              'Logout',
-            ),
-            onTap: () {
-              // Navigate to the settings page or perform the desired action
-            },
-          ),
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                'Logout',
+              ),
+              onTap: () async {}),
         ],
       ),
     );
