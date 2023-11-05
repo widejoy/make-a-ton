@@ -21,6 +21,13 @@ class _TrainState extends State<Train> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 220, 101, 4),
+          actions: [
+            Center(
+                child: Image.asset(
+              'assets/logo.png',
+              scale: 5,
+            )),
+          ],
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

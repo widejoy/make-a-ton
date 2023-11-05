@@ -21,6 +21,13 @@ class _TrafficState extends State<Traffic> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 220, 101, 4),
+          actions: [
+            Center(
+                child: Image.asset(
+              'assets/logo.png',
+              scale: 5,
+            )),
+          ],
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -31,7 +38,7 @@ class _TrafficState extends State<Traffic> {
         body: Column(
           children: [
             Image.asset(
-              'assets/bus-await.jpeg',
+              'assets/traffic.jpeg',
               height: 350,
             ),
             const SizedBox(height: 20),
