@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_project/screens/create_post_screen.dart';
@@ -6,6 +8,7 @@ import 'package:my_project/screens/near_me.dart';
 import 'package:my_project/widget_tree.dart';
 import 'package:my_project/widgets/drawer.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +33,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    settype();
+  }
+
+  void settype() async {
+    User? currentuser = FirebaseAuth.instance.currentUser;
+    String uid = currentuser!.uid;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentSnapshot document =
+        await firestore.collection('users').doc(uid).get();
+    if (document["type"] == "Normal User") {
+      await prefs.setBool('isUser', true);
+    } else {
+      await prefs.setBool('isUser', false);
+    }
+  }
+
   int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {

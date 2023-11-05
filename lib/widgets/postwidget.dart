@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/screens/form.dart';
 import 'package:my_project/screens/profilepage.dart';
 import 'package:share/share.dart';
 import 'package:intl/intl.dart';
@@ -21,11 +22,13 @@ class PostWidget extends StatefulWidget {
       required this.progress,
       required this.time,
       this.organisationname = "",
-      required this.imageUrls})
+      required this.imageUrls,
+      required this.isUser})
       : super(key: key);
 
   final String username;
   final String title;
+  final bool isUser;
   final String imageUrls;
   final Timestamp time;
   final String location;
@@ -173,7 +176,9 @@ class _PostWidgetState extends State<PostWidget> {
               subtitle: Text(widget.location),
             ),
             isloading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
                 : CarouselSlider(
                     items: imageBytes.map((imageData) {
                       return Image.memory(
@@ -218,6 +223,20 @@ class _PostWidgetState extends State<PostWidget> {
                 style: const TextStyle(fontSize: 16),
               ),
             ),
+            !widget.isUser
+                ? Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const CustomForm(),
+                          ),
+                        );
+                      },
+                      child: const Text('Contribute'),
+                    ),
+                  )
+                : const SizedBox(),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
