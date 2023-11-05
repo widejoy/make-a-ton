@@ -67,6 +67,13 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 220, 101, 4),
+          actions: [
+            Center(
+                child: Image.asset(
+              'assets/logo.png',
+              scale: 5,
+            )),
+          ],
         ),
         drawer: const MyDrawer(),
         bottomNavigationBar: NavigationBar(

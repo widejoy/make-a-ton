@@ -3,6 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/Authentication/screens/login.dart';
+import 'package:my_project/screens/busTiming.dart';
+import 'package:my_project/screens/nearbyTraffic.dart';
+import 'package:my_project/screens/trainTimings.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -25,17 +28,35 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.bus_alert),
             title: const Text('Bus Timing'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return const Bus();
+                },
+              ));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.train_outlined),
             title: const Text('Train Timing'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return const Train();
+                },
+              ));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.traffic),
             title: const Text('Traffic High areas around you '),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return const Traffic();
+                },
+              ));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.info),

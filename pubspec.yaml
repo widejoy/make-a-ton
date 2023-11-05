@@ -73,6 +73,10 @@ flutter:
     - assets/announcement-image.jpeg
     - assets/to-do-image.jpeg
     - assets/travel.jpeg
+    - assets/bus-await.jpeg
+    - assets/train.jpeg
+    - assets/traffic.jpeg
+    - assets/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
