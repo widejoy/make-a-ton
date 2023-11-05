@@ -14,7 +14,10 @@ class _MyFormState extends State<MyForm> {
   void saveToFireStore(String selectedValue) {
     User? currentuser = FirebaseAuth.instance.currentUser;
     String uid = currentuser!.uid;
-    Map<String, String> data = {"type": selectedValue};
+    Map<String, dynamic> data = {"type": selectedValue};
+    if (selectedValue == "Organisation") {
+      data = {"type": selectedValue, "jobs": <String>[]};
+    }
     FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
@@ -102,11 +105,11 @@ class _MyFormState extends State<MyForm> {
 
 List<DropdownMenuItem<String>> list = [
   const DropdownMenuItem(
-    value: "Normal User", // Update this line to use a String value
+    value: "Normal User",
     child: Text("Normal User"),
   ),
   const DropdownMenuItem(
-    value: "Organisation", // Update this line to use a String value
+    value: "Organisation",
     child: Text("Organisation"),
   ),
 ];
