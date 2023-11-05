@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -15,13 +16,25 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  bool type = false;
+
+  void gettype() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userType = prefs.getBool('isUser');
+
+    setState(() {
+      type = userType ?? false;
+    });
+  }
+
   @override
   void initState() {
-    print(FirebaseAuth.instance.currentUser);
+    gettype();
     super.initState();
   }
 
   final TextEditingController titleController = TextEditingController();
+  bool isvolunteer = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
@@ -53,7 +66,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       'uid': uid,
       'votes': 0,
       'progress': 0,
-      'organisationanme': ""
+      'organisationanme': "",
+      'isvolunteer': isvolunteer
     };
 
     final DocumentReference postRef =
@@ -104,6 +118,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   'Pick Images',
                 ),
               ),
+              type
+                  ? Row(
+                      children: [
+                        const SizedBox(
+                          width: 100,
+                        ),
+                        const Text('Is This a Volunteer job?'),
+                        Checkbox(
+                          value: isvolunteer,
+                          onChanged: (value) => setState(
+                            () {
+                              isvolunteer = value!;
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
               if (selectedImages != null)
                 Column(
                   children: imageWidgets,

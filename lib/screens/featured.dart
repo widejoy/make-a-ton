@@ -15,7 +15,8 @@ class Featured extends StatelessWidget {
         votecount: 4,
         progress: 2,
         time: Timestamp(12, 34),
-        imageUrls: '73ttJmqC5NAJEjDD9LtK',
+        imageUrls: 'jUgiRGXDzHEldspyhJzt',
+        organisationname: "rgbt",
         isUser: true);
   }
 }

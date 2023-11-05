@@ -14,8 +14,8 @@ class _NearMeState extends State<NearMe> {
   bool? type;
 
   void gettype() async {
-    final SharedPreferences _prefs = await SharedPreferences.getInstance();
-    final userType = _prefs.getBool('isUser');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userType = prefs.getBool('isUser');
 
     setState(() {
       type = userType;
