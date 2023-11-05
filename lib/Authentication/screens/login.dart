@@ -35,9 +35,14 @@ class _LoginState extends State<Login> {
       child: Container(
         color: const Color.fromARGB(255, 218, 244, 244),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 300, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 200, 20, 300),
           child: Column(
             children: [
+              const Text(
+                "Log in",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
