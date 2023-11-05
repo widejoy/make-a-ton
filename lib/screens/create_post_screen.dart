@@ -16,18 +16,11 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   bool isLoading = false;
-  @override
-  void initState() {
-    print(FirebaseAuth.instance.currentUser);
-    super.initState();
-  }
-
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   List<XFile>? selectedImages;
-
   List<Widget> imageWidgets = [];
 
   Future<void> pickImage() async {
@@ -42,6 +35,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Future<void> onPressed() async {
+    setState(() {
+      isLoading =
+          true; // Set isLoading to true when starting the loading process
+    });
+
     final User? user = FirebaseAuth.instance.currentUser;
 
     final String uid = user!.uid;
@@ -66,8 +64,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           .child('posts/$postID/${image.path.split('/').last}');
       final UploadTask uploadTask = storageRef.putFile(File(image.path));
 
-      await uploadTask.whenComplete(() => print('Image uploaded'));
+      await uploadTask.whenComplete(() {
+        print('Image uploaded');
+      });
     }
+
+    // After the loading is complete, set isLoading back to false
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -111,20 +116,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ),
               const SizedBox(height: 20),
               Center(
-                  child: ElevatedButton(
-                onPressed: isLoading ? null : onPressed,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.orange),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                child: ElevatedButton(
+                  onPressed: isLoading ? null : onPressed,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orange),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  child: isLoading
+                      ? const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        )
+                      : const Text(
+                          'Submit',
+                        ),
                 ),
-                child: isLoading
-                    ? const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      )
-                    : const Text(
-                        'Submit',
-                      ),
-              )),
+              ),
             ],
           ),
         ),
