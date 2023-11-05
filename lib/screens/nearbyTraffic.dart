@@ -39,7 +39,7 @@ class _TrafficState extends State<Traffic> {
           children: [
             Image.asset(
               'assets/traffic.jpeg',
-              height: 350,
+              height: 220,
             ),
             const SizedBox(height: 20),
             const Text(
