@@ -49,7 +49,7 @@ class _SignUpState extends State<SignUp> {
         child: Container(
           color: const Color.fromARGB(255, 218, 244, 244),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 170, 20, 300),
             child: Column(
               children: [
                 const Text(
