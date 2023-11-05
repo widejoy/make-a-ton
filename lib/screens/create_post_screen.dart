@@ -15,6 +15,7 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  bool isLoading = false;
   @override
   void initState() {
     print(FirebaseAuth.instance.currentUser);
@@ -110,17 +111,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ),
               const SizedBox(height: 20),
               Center(
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.orange),
-                  ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: ElevatedButton(
+                onPressed: isLoading ? null : onPressed,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.orange),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
                 ),
-              ),
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
+                    : const Text(
+                        'Submit',
+                      ),
+              )),
             ],
           ),
         ),
