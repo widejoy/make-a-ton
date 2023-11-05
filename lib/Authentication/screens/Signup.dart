@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/Authentication/screens/login.dart';
-
 import 'package:my_project/Authentication/widgets/field.dart';
 import 'package:my_project/screens/onboarding.dart';
 
@@ -18,8 +17,13 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String? errorMessage = '';
+  bool isLoading = false; // Add isLoading flag
 
   Future<void> createUserWithEmailAndPassword() async {
+    setState(() {
+      isLoading = true; // Set loading state to true while creating the account
+    });
+
     try {
       final UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -38,6 +42,8 @@ class _SignUpState extends State<SignUp> {
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
+        isLoading =
+            false; // Set loading state back to false in case of an error
       });
     }
   }
@@ -74,21 +80,25 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  onPressed: () {
-                    createUserWithEmailAndPassword().then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Account created sucesfully!'),
-                        ),
-                      );
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => Onbording(),
-                        ),
-                      );
-                    });
-                  },
-                  child: const Text("Sign up"),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          createUserWithEmailAndPassword().then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Account created successfully!'),
+                              ),
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => Onbording(),
+                              ),
+                            );
+                          });
+                        },
+                  child: isLoading
+                      ? CircularProgressIndicator() // Display loading spinner
+                      : const Text("Sign up"),
                 ),
                 const SizedBox(height: 20),
                 const Divider(
