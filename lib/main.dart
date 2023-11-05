@@ -39,6 +39,8 @@ class _MyAppState extends State<MyApp> {
     settype();
   }
 
+  String type = "";
+
   void settype() async {
     User? currentuser = FirebaseAuth.instance.currentUser;
     String uid = currentuser!.uid;
@@ -46,6 +48,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentSnapshot document =
         await firestore.collection('users').doc(uid).get();
+    type = document["type"];
     if (document["type"] == "Normal User") {
       await prefs.setBool('isUser', true);
     } else {

@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:my_project/screens/form.dart';
 import 'package:my_project/screens/profilepage.dart';
+import 'package:my_project/widgets/custom_field.dart';
 import 'package:share/share.dart';
 import 'package:intl/intl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -46,6 +46,8 @@ class _PostWidgetState extends State<PostWidget> {
 
   bool isupvoted = false;
   bool isloading = false;
+  TextEditingController how = TextEditingController();
+  TextEditingController deadline = TextEditingController();
   int _currentImageIndex = 0;
   bool isdownvoted = false;
   Future<List<String>> getFileNamesInFirebaseStorage(
@@ -223,13 +225,40 @@ class _PostWidgetState extends State<PostWidget> {
                 style: const TextStyle(fontSize: 16),
               ),
             ),
-            !widget.isUser
+            !widget.isUser & (widget.progress == 0)
                 ? Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const CustomForm(),
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Column(
+                            children: [
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              customField(
+                                  how, "how do you plan on solving this issue"),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              customField(deadline,
+                                  "when do you plan on solving the issue"),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'your report has been submitted and is avaiting verification'),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Submit'),
+                              )
+                            ],
                           ),
                         );
                       },
