@@ -8,6 +8,7 @@ class Featured extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PostWidget(
+        isvolunteer: false,
         username: 'roger',
         title: 'title',
         location: 'kochi,kerela',

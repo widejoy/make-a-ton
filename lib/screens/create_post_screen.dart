@@ -130,24 +130,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   'Pick Images',
                 ),
               ),
-              type
-                  ? Row(
-                      children: [
-                        const SizedBox(
-                          width: 100,
-                        ),
-                        const Text('Is This a Volunteer job?'),
-                        Checkbox(
-                          value: isvolunteer,
-                          onChanged: (value) => setState(
-                            () {
-                              isvolunteer = value!;
-                            },
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 100,
+                  ),
+                  const Text('Is This a Volunteer job?'),
+                  Checkbox(
+                    value: isvolunteer,
+                    onChanged: (value) => setState(
+                      () {
+                        isvolunteer = value!;
+                      },
+                    ),
+                  ),
+                ],
+              ),
               if (selectedImages != null)
                 Column(
                   children: imageWidgets,

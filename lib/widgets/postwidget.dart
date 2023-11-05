@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/screens/profilepage.dart';
-import 'package:my_project/widgets/custom_field.dart';
 import 'package:share/share.dart';
 import 'package:intl/intl.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -23,10 +22,12 @@ class PostWidget extends StatefulWidget {
       required this.time,
       this.organisationname = "",
       required this.imageUrls,
-      required this.isUser})
+      required this.isUser,
+      required this.isvolunteer})
       : super(key: key);
 
   final String username;
+  final bool isvolunteer;
   final String title;
   final bool isUser;
   final String imageUrls;
@@ -225,47 +226,35 @@ class _PostWidgetState extends State<PostWidget> {
                 style: const TextStyle(fontSize: 16),
               ),
             ),
-            !widget.isUser & (widget.progress == 0)
+            !widget.isUser & (widget.progress == 0) & !widget.isvolunteer
                 ? Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Column(
-                            children: [
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              customField(
-                                  how, "how do you plan on solving this issue"),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              customField(deadline,
-                                  "when do you plan on solving the issue"),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'your report has been submitted and is avaiting verification'),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Submit'),
-                              )
-                            ],
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'sucesfully registered you will get updated if you are selected'),
                           ),
                         );
                       },
                       child: const Text('Contribute'),
                     ),
                   )
-                : const SizedBox(),
+                : widget.isvolunteer
+                    ? Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'sucesfully registered you will get updated if you are selected'),
+                              ),
+                            );
+                          },
+                          child: const Text('volunteer'),
+                        ),
+                      )
+                    : SizedBox(),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(

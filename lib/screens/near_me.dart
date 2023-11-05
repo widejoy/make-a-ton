@@ -42,6 +42,8 @@ class _NearMeState extends State<NearMe> {
 
           final posts = snapshot.data!.docs
               .map((doc) => PostWidget(
+                    organisationname: doc['organisationanme'],
+                    isvolunteer: doc['isvolunteer'],
                     isUser: type!,
                     imageUrls: doc.id,
                     time: doc['timestamp'],
@@ -58,6 +60,8 @@ class _NearMeState extends State<NearMe> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               return PostWidget(
+                organisationname: posts[index].organisationname,
+                isvolunteer: posts[index].isvolunteer,
                 isUser: type!,
                 imageUrls: posts[index].imageUrls,
                 time: posts[index].time,
